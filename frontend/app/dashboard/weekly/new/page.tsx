@@ -9,6 +9,7 @@ interface CreateWeeklyLoanRequest {
   totalLoanAmount: number;
   interestAmount: number;
   interestPercentage: number;
+  installmentPeriodInDays: number;
   amountGiven: number;
   issuingDate: string;
 }
@@ -19,6 +20,7 @@ interface WeeklyLoanForm {
   totalLoanAmount: number;
   interestAmount: number;
   interestPercentage: number;
+  installmentPeriodInDays: number;
   amountGiven: number;
   issuingDate: string;
 }
@@ -31,6 +33,7 @@ export default function CreateWeeklyLoan() {
     totalLoanAmount: 0,
     interestAmount: 0,
     interestPercentage: 0,
+    installmentPeriodInDays: 7, // Default to 7 days
     amountGiven: 0,
     issuingDate: new Date().toISOString().split("T")[0], // Today's date
   });
@@ -131,6 +134,16 @@ export default function CreateWeeklyLoan() {
       newErrors.amountGiven = "Amount given must be greater than 0";
     }
 
+    if (formData.installmentPeriodInDays <= 0) {
+      newErrors.installmentPeriodInDays =
+        "Installment period must be greater than 0";
+    }
+
+    if (formData.installmentPeriodInDays > 365) {
+      newErrors.installmentPeriodInDays =
+        "Installment period cannot exceed 365 days";
+    }
+
     if (!formData.issuingDate) {
       newErrors.issuingDate = "Issuing date is required";
     }
@@ -155,6 +168,7 @@ export default function CreateWeeklyLoan() {
         totalLoanAmount: formData.totalLoanAmount,
         interestAmount: formData.interestAmount,
         interestPercentage: formData.interestPercentage,
+        installmentPeriodInDays: formData.installmentPeriodInDays,
         amountGiven: formData.amountGiven,
         issuingDate: formData.issuingDate,
       };
@@ -201,10 +215,11 @@ export default function CreateWeeklyLoan() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">
-          Create New Weekly Loan
+          Create New Custom Period Loan
         </h1>
         <p className="mt-2 text-gray-600">
-          Fill in the details to create a new weekly loan
+          Fill in the details to create a new loan with customizable installment
+          periods
         </p>
       </div>
 
@@ -283,7 +298,7 @@ export default function CreateWeeklyLoan() {
           </div>
 
           {/* Loan Amount Information */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
               <label
                 htmlFor="totalLoanAmount"
@@ -386,6 +401,49 @@ export default function CreateWeeklyLoan() {
                   {errors.interestPercentage}
                 </p>
               )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="installmentPeriodInDays"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Installment Period (Days) *
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-500 text-sm font-medium">
+                    Days
+                  </span>
+                </div>
+                <input
+                  type="number"
+                  id="installmentPeriodInDays"
+                  className={`w-full pl-12 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-900 bg-white ${
+                    errors.installmentPeriodInDays
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
+                  value={formData.installmentPeriodInDays || ""}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "installmentPeriodInDays",
+                      Number(e.target.value)
+                    )
+                  }
+                  placeholder="Enter days"
+                  min="1"
+                  max="365"
+                />
+              </div>
+              {errors.installmentPeriodInDays && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.installmentPeriodInDays}
+                </p>
+              )}
+              <p className="mt-1 text-xs text-gray-500">
+                How many days between installments (1-365)
+              </p>
             </div>
           </div>
 

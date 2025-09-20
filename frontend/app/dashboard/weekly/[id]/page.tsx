@@ -11,6 +11,7 @@ interface WeeklyLoan {
   amountGiven: number;
   interestAmount: number;
   interestPercentage: number;
+  installmentPeriodInDays: number;
   profitAmount: number;
   collectedAmount: number;
   remainingAmount: number;
@@ -60,7 +61,7 @@ export default function WeeklyLoanDetail() {
     if (notification) {
       const timer = setTimeout(() => {
         setNotification(null);
-      }, 5000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [notification]);
@@ -145,13 +146,13 @@ export default function WeeklyLoanDetail() {
 
     let nextDate: Date;
     if (lastInstallment) {
-      // Add one week to the last installment date
+      // Add custom period to the last installment date
       nextDate = new Date(lastInstallment.date);
-      nextDate.setDate(nextDate.getDate() + 7);
+      nextDate.setDate(nextDate.getDate() + loan.installmentPeriodInDays);
     } else {
-      // If no installments, add one week to issuing date
+      // If no installments, add custom period to issuing date
       nextDate = new Date(loan.issuingDate);
-      nextDate.setDate(nextDate.getDate() + 7);
+      nextDate.setDate(nextDate.getDate() + loan.installmentPeriodInDays);
     }
 
     const newInstallment: InstallmentUpdate = {
@@ -615,7 +616,7 @@ export default function WeeklyLoanDetail() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">{loan.name}</h1>
-          <p className="mt-2 text-gray-600">Weekly Loan Details</p>
+          <p className="mt-2 text-gray-600">Custom Period Loan Details</p>
         </div>
         <div className="flex space-x-3">
           {loan.status === "active" &&
@@ -696,9 +697,16 @@ export default function WeeklyLoanDetail() {
           </div>
 
           <div>
+            <p className="text-sm text-gray-600">Installment Period</p>
+            <p className="text-lg font-semibold text-gray-900">
+              {loan.installmentPeriodInDays} days
+            </p>
+          </div>
+
+          <div>
             <p className="text-sm text-gray-600">Total Installments</p>
             <p className="text-lg font-semibold text-gray-900">
-              {loan.installments.length} weeks
+              {loan.installments.length} installments
             </p>
           </div>
         </div>

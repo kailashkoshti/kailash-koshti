@@ -29,6 +29,12 @@ const weeklySchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    installmentPeriodInDays: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 365, // Allow up to 1 year for installment periods
+    },
     profitAmount: {
       type: Number,
       required: true,

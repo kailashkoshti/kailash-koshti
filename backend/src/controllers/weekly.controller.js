@@ -15,6 +15,7 @@ const createWeeklyLoan = asyncHandler(async (req, res) => {
     totalLoanAmount,
     interestAmount,
     interestPercentage,
+    installmentPeriodInDays,
     issuingDate,
   } = req.body;
 
@@ -25,11 +26,12 @@ const createWeeklyLoan = asyncHandler(async (req, res) => {
     !totalLoanAmount ||
     !interestAmount ||
     !interestPercentage ||
+    !installmentPeriodInDays ||
     !issuingDate
   ) {
     throw new ApiError(
       400,
-      "All fields are required: customerName, amountGiven, totalLoanAmount, interestAmount, interestPercentage, issuingDate"
+      "All fields are required: customerName, amountGiven, totalLoanAmount, interestAmount, interestPercentage, installmentPeriodInDays, issuingDate"
     );
   }
 
@@ -38,11 +40,20 @@ const createWeeklyLoan = asyncHandler(async (req, res) => {
     amountGiven <= 0 ||
     totalLoanAmount <= 0 ||
     interestAmount < 0 ||
-    interestPercentage < 0
+    interestPercentage < 0 ||
+    installmentPeriodInDays <= 0
   ) {
     throw new ApiError(
       400,
-      "Amount given and total loan amount must be positive, interest fields cannot be negative"
+      "Amount given and total loan amount must be positive, interest fields and installment period cannot be negative or zero"
+    );
+  }
+
+  // Validate installment period range
+  if (installmentPeriodInDays < 1 || installmentPeriodInDays > 365) {
+    throw new ApiError(
+      400,
+      "Installment period must be between 1 and 365 days"
     );
   }
 
@@ -57,7 +68,7 @@ const createWeeklyLoan = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Phone number must be at least 10 digits");
   }
 
-  // Create weekly loan object (without installments since weeks are variable)
+  // Create weekly loan object (without installments since periods are variable)
   const weeklyLoanData = {
     name: customerName,
     phoneNumber: phoneNumber || null,
@@ -66,10 +77,11 @@ const createWeeklyLoan = asyncHandler(async (req, res) => {
     issuingDate: parsedIssuingDate,
     interestAmount: interestAmount,
     interestPercentage: interestPercentage,
+    installmentPeriodInDays: installmentPeriodInDays,
     profitAmount: interestAmount, // For consistency with model schema
     collectedAmount: 0,
     remainingAmount: totalLoanAmount,
-    installments: [], // Empty array since weeks are variable
+    installments: [], // Empty array since periods are variable
     status: "active",
   };
 

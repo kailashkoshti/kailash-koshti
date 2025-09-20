@@ -59,7 +59,7 @@ export default function DailyLoanDetail() {
     if (notification) {
       const timer = setTimeout(() => {
         setNotification(null);
-      }, 5000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [notification]);

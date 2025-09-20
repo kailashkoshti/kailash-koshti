@@ -158,10 +158,22 @@ export default function MonthlyLoans() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Monthly Loans</h1>
-        <p className="mt-2 text-gray-600">
-          Manage and track monthly loan transactions
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Monthly Loans</h1>
+            <p className="mt-2 text-gray-600">
+              Manage and track monthly loan transactions
+            </p>
+          </div>
+          <div className="text-right">
+            <div className="text-2xl font-bold text-purple-600">
+              {loans.length}
+            </div>
+            <div className="text-sm text-gray-500">
+              {loans.length === 1 ? "Loan" : "Loans"}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Search and Filter Section */}
@@ -242,12 +254,18 @@ export default function MonthlyLoans() {
 
       {/* Loans Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filteredLoans.map((loan) => (
+        {filteredLoans.map((loan, index) => (
           <div
             key={loan._id}
             onClick={() => router.push(`/dashboard/monthly/${loan._id}`)}
             className="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out p-6 border-l-4 border-purple-500 cursor-pointer"
           >
+            {/* Card Number */}
+            <div className="mb-2">
+              <div className="inline-flex bg-purple-100 text-purple-800 text-sm font-bold rounded-full w-8 h-8 items-center justify-center">
+                {index + 1}
+              </div>
+            </div>
             {/* Header with Status */}
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
