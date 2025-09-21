@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const monthlySchema = new mongoose.Schema(
   {
+    loanNumber: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
     name: {
       type: String,
       required: true,

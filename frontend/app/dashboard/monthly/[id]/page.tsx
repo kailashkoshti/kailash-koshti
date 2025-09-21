@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 
 interface MonthlyLoan {
   _id: string;
+  loanNumber: number;
   name: string;
   phoneNumber: string;
   loanAmount: number;

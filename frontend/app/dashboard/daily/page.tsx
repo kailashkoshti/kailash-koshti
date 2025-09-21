@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 interface DailyLoan {
   _id: string;
+  loanNumber: number;
   name: string;
   phoneNumber: string;
   loanAmount: number;
@@ -237,7 +238,7 @@ export default function DailyLoans() {
             {/* Card Number */}
             <div className="mb-2">
               <div className="inline-flex bg-blue-100 text-blue-800 text-sm font-bold rounded-full w-8 h-8 items-center justify-center">
-                {index + 1}
+                {loan.loanNumber}
               </div>
             </div>
             {/* Header with Status */}

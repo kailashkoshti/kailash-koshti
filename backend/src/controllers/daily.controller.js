@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Daily } from "../models/daily.model.js";
+import { getNextLoanNumber } from "../utils/loanNumberGenerator.js";
 
 const createDailyLoan = asyncHandler(async (req, res) => {
   // Extract data from request body
@@ -74,8 +75,12 @@ const createDailyLoan = asyncHandler(async (req, res) => {
     });
   }
 
+  // Generate next loan number
+  const loanNumber = await getNextLoanNumber("daily");
+
   // Create daily loan object
   const dailyLoanData = {
+    loanNumber: loanNumber,
     name: customerName,
     phoneNumber: phoneNumber,
     loanAmount: totalLoanAmount,

@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Weekly } from "../models/weekly.model.js";
+import { getNextLoanNumber } from "../utils/loanNumberGenerator.js";
 import dotenv from "dotenv";
 
 dotenv.config({ path: "../.env" });
@@ -68,8 +69,12 @@ const createWeeklyLoan = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Phone number must be at least 10 digits");
   }
 
+  // Generate next loan number
+  const loanNumber = await getNextLoanNumber("weekly");
+
   // Create weekly loan object (without installments since periods are variable)
   const weeklyLoanData = {
+    loanNumber: loanNumber,
     name: customerName,
     phoneNumber: phoneNumber || null,
     loanAmount: totalLoanAmount,
