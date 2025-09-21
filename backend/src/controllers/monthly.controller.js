@@ -71,7 +71,7 @@ const createMonthlyLoan = asyncHandler(async (req, res) => {
     issuingDate: parsedIssuingDate,
     interestAmount: interestAmount,
     interestPercentage: interestPercentage,
-    profitAmount: interestAmount, // For consistency with model schema
+    profitAmount: 0, // Initial profit is 0, will be updated when collectedAmount > amountGiven
     collectedAmount: 0,
     remainingAmount: totalLoanAmount,
     installments: [], // Empty array since months are variable
@@ -269,14 +269,12 @@ const updateMonthlyInstallment = asyncHandler(async (req, res) => {
       }
     });
 
-    // Calculate total profit amount and collected amount based on paid installments
-    let totalProfitAmount = monthlyLoan.interestAmount; // Start with base interest amount
+    // Calculate collected amount from all paid installments
     let collectedAmount = 0; // Start fresh calculation for installment amounts only
 
     // Calculate collected amount from all paid installments
     updatedInstallments.forEach((installment) => {
       if (installment.status === "paid") {
-        totalProfitAmount += installment.amount; // Add monthly installment to profit
         collectedAmount += installment.amount; // Add monthly installment to collected amount
       }
     });
@@ -284,6 +282,12 @@ const updateMonthlyInstallment = asyncHandler(async (req, res) => {
     // If loan is marked as paid, add the loan amount to collected amount
     if (monthlyLoan.collectedAmount >= monthlyLoan.loanAmount) {
       collectedAmount += monthlyLoan.loanAmount;
+    }
+
+    // Calculate total profit amount only when collectedAmount > amountGiven
+    let totalProfitAmount = 0;
+    if (collectedAmount > monthlyLoan.amountGiven) {
+      totalProfitAmount = collectedAmount - monthlyLoan.amountGiven;
     }
 
     // Keep remaining amount unchanged (only updated when principal is paid back)
@@ -497,9 +501,18 @@ const markMonthlyLoanAsPaid = asyncHandler(async (req, res) => {
     const finalStatus = "completed";
     const endDate = new Date(); // Set current date as end date
 
+    // Calculate new collected amount and profit
+    const newCollectedAmount =
+      monthlyLoan.collectedAmount + monthlyLoan.loanAmount;
+    const newProfitAmount =
+      newCollectedAmount > monthlyLoan.amountGiven
+        ? newCollectedAmount - monthlyLoan.amountGiven
+        : 0;
+
     // Update loan to mark as paid
     const updateData = {
-      collectedAmount: monthlyLoan.collectedAmount + monthlyLoan.loanAmount, // Add loan amount to existing collected amount
+      collectedAmount: newCollectedAmount, // Add loan amount to existing collected amount
+      profitAmount: newProfitAmount, // Update profit amount
       remainingAmount: 0,
       status: finalStatus, // Always mark as completed
       endDate: endDate, // Set end date
