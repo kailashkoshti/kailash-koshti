@@ -56,6 +56,13 @@ export default function DailyLoans() {
           }
         );
 
+        if (response.status === 401) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("user");
+          router.push("/");
+          return;
+        }
+
         if (!response.ok) {
           throw new Error(
             `HTTP ${response.status}: Failed to fetch daily loans`

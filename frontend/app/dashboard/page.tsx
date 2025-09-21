@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 interface DashboardData {
@@ -21,6 +22,7 @@ export default function Dashboard() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -39,6 +41,13 @@ export default function Dashboard() {
             },
           }
         );
+
+        if (response.status === 401) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("user");
+          router.push("/");
+          return;
+        }
 
         if (!response.ok) {
           throw new Error(

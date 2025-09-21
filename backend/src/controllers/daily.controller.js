@@ -253,8 +253,8 @@ const updateDailyInstallment = asyncHandler(async (req, res) => {
       }
     });
 
-    // Calculate remaining amount
-    const remainingAmount = dailyLoan.loanAmount - collectedAmount;
+    // Calculate remaining amount (never negative)
+    const remainingAmount = Math.max(0, dailyLoan.loanAmount - collectedAmount);
 
     // Calculate total profit (collectedAmount - amountGiven, if positive, else 0)
     const totalProfit = Math.max(0, collectedAmount - dailyLoan.amountGiven);

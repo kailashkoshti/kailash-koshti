@@ -49,6 +49,13 @@ export default function WeeklyLoans() {
           }
         );
 
+        if (response.status === 401) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("user");
+          router.push("/");
+          return;
+        }
+
         if (!response.ok) {
           throw new Error(
             `HTTP ${response.status}: Failed to fetch weekly loans`

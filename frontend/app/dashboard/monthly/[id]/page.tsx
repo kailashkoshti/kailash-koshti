@@ -84,6 +84,13 @@ export default function MonthlyLoanDetail() {
         }
       );
 
+      if (response.status === 401) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+        router.push("/");
+        return;
+      }
+
       if (!response.ok) {
         throw new Error(
           `HTTP ${response.status}: Failed to fetch loan details`
@@ -245,6 +252,13 @@ export default function MonthlyLoanDetail() {
         }
       );
 
+      if (response.status === 401) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+        router.push("/");
+        return;
+      }
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to update installments");
@@ -305,6 +319,13 @@ export default function MonthlyLoanDetail() {
         }
       );
 
+      if (response.status === 401) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+        router.push("/");
+        return;
+      }
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to mark loan as paid");
@@ -357,6 +378,13 @@ export default function MonthlyLoanDetail() {
           },
         }
       );
+
+      if (response.status === 401) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+        router.push("/");
+        return;
+      }
 
       if (!response.ok) {
         const errorData = await response.json();

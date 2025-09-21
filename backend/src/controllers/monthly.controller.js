@@ -381,8 +381,11 @@ const deleteMonthlyInstallment = asyncHandler(async (req, res) => {
       }
     });
 
-    // Calculate remaining amount
-    const remainingAmount = monthlyLoan.loanAmount - collectedAmount;
+    // Calculate remaining amount (never negative)
+    const remainingAmount = Math.max(
+      0,
+      monthlyLoan.loanAmount - collectedAmount
+    );
 
     // Determine loan status: completed only if marked as paid AND all installments are paid
     const isAllInterestPaid = updatedInstallments.every(

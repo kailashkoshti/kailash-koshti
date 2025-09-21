@@ -252,6 +252,13 @@ export default function CreateDailyLoan() {
         body: JSON.stringify(loanData),
       });
 
+      if (response.status === 401) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+        router.push("/");
+        return;
+      }
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to create daily loan");
