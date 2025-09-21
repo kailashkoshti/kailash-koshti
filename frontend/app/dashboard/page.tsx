@@ -7,6 +7,7 @@ interface DashboardData {
   totalAmountCollected: number;
   totalAmountRemaining: number;
   totalProfitAmount: number;
+  totalLoanAmount: number;
 }
 
 export default function Dashboard() {
@@ -15,6 +16,7 @@ export default function Dashboard() {
     totalAmountCollected: 0,
     totalAmountRemaining: 0,
     totalProfitAmount: 0,
+    totalLoanAmount: 0,
   });
 
   const [loading, setLoading] = useState(true);
@@ -71,6 +73,13 @@ export default function Dashboard() {
   };
 
   const tiles = [
+    {
+      title: "Total Loan Amount",
+      value: stats.totalLoanAmount,
+      color: "bg-indigo-500",
+      icon: "🏦",
+      description: "Total loan value",
+    },
     {
       title: "Total Amount Given",
       value: stats.totalAmountGiven,
@@ -138,7 +147,7 @@ export default function Dashboard() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
         {tiles.map((tile, index) => (
           <div
             key={index}

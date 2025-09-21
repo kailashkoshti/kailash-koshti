@@ -77,6 +77,7 @@ const getDashboardData = asyncHandler(async (req, res) => {
     let totalAmountCollected = 0;
     let totalAmountRemaining = 0;
     let totalProfitAmount = 0;
+    let totalLoanAmount = 0;
 
     // Process Daily Loans
     dailyLoans.forEach((loan) => {
@@ -84,11 +85,13 @@ const getDashboardData = asyncHandler(async (req, res) => {
       const collectedAmount = loan.collectedAmount || 0;
       const remainingAmount = loan.remainingAmount || 0;
       const totalProfit = loan.totalProfit || 0; // Use totalProfit for daily loans
+      const loanAmount = loan.loanAmount || 0;
 
       totalAmountGiven += amountGiven;
       totalAmountCollected += collectedAmount;
       totalAmountRemaining += remainingAmount;
       totalProfitAmount += totalProfit;
+      totalLoanAmount += loanAmount;
     });
 
     // Process Weekly Loans
@@ -97,11 +100,13 @@ const getDashboardData = asyncHandler(async (req, res) => {
       const collectedAmount = loan.collectedAmount || 0;
       const remainingAmount = loan.remainingAmount || 0;
       const profitAmount = loan.profitAmount || 0;
+      const loanAmount = loan.loanAmount || 0;
 
       totalAmountGiven += amountGiven;
       totalAmountCollected += collectedAmount;
       totalAmountRemaining += remainingAmount;
       totalProfitAmount += profitAmount;
+      totalLoanAmount += loanAmount;
     });
 
     // Process Monthly Loans
@@ -110,19 +115,22 @@ const getDashboardData = asyncHandler(async (req, res) => {
       const collectedAmount = loan.collectedAmount || 0;
       const remainingAmount = loan.remainingAmount || 0;
       const profitAmount = loan.profitAmount || 0;
+      const loanAmount = loan.loanAmount || 0;
 
       totalAmountGiven += amountGiven;
       totalAmountCollected += collectedAmount;
       totalAmountRemaining += remainingAmount;
       totalProfitAmount += profitAmount;
+      totalLoanAmount += loanAmount;
     });
 
-    // Prepare dashboard data with only 4 essential metrics
+    // Prepare dashboard data with 5 essential metrics
     const dashboardData = {
       totalAmountGiven: totalAmountGiven,
       totalAmountCollected: totalAmountCollected,
       totalAmountRemaining: totalAmountRemaining,
       totalProfitAmount: totalProfitAmount,
+      totalLoanAmount: totalLoanAmount,
     };
 
     return res
