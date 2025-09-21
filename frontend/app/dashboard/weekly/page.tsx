@@ -16,6 +16,7 @@ interface WeeklyLoan {
   installmentPeriodInDays: number;
   issuingDate: string;
   status: "active" | "completed";
+  endDate: string | null;
   collectedAmount: number;
   remainingAmount: number;
   createdAt: string;

@@ -289,16 +289,9 @@ const updateMonthlyInstallment = asyncHandler(async (req, res) => {
     // Keep remaining amount unchanged (only updated when principal is paid back)
     const remainingAmount = monthlyLoan.remainingAmount;
 
-    // Determine loan status: completed only if marked as paid AND all installments are paid
-    const isAllInterestPaid = updatedInstallments.every(
-      (inst) => inst.status === "paid"
-    );
-    const isMarkedAsPaid =
-      monthlyLoan.collectedAmount >= monthlyLoan.loanAmount;
-
-    // Only completed if marked as paid AND all installments are paid
+    // Keep loan status as active unless it was already marked as completed
     const loanStatus =
-      isMarkedAsPaid && isAllInterestPaid ? "completed" : "active";
+      monthlyLoan.status === "completed" ? "completed" : "active";
 
     const updateData = {
       installments: updatedInstallments,
@@ -500,19 +493,16 @@ const markMonthlyLoanAsPaid = asyncHandler(async (req, res) => {
       (inst) => inst.status !== "paid"
     );
 
-    // Determine final status: completed only if marked as paid AND all interest installments are paid
-    const allInstallmentsPaid = monthlyLoan.installments.every(
-      (inst) => inst.status === "paid"
-    );
-    const wasAlreadyMarkedAsPaid =
-      monthlyLoan.collectedAmount >= monthlyLoan.loanAmount;
-    const finalStatus = allInstallmentsPaid ? "completed" : "active";
+    // Always mark as completed when mark as paid is clicked
+    const finalStatus = "completed";
+    const endDate = new Date(); // Set current date as end date
 
     // Update loan to mark as paid
     const updateData = {
       collectedAmount: monthlyLoan.collectedAmount + monthlyLoan.loanAmount, // Add loan amount to existing collected amount
       remainingAmount: 0,
-      status: finalStatus, // Mark as completed only if all installments are paid
+      status: finalStatus, // Always mark as completed
+      endDate: endDate, // Set end date
     };
 
     const updatedLoan = await Monthly.findByIdAndUpdate(id, updateData, {

@@ -17,6 +17,7 @@ interface MonthlyLoan {
   remainingAmount: number;
   issuingDate: string;
   status: "active" | "completed";
+  endDate: string | null;
 }
 
 export default function MonthlyLoans() {

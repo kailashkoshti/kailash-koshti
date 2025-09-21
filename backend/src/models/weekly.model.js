@@ -70,6 +70,10 @@ const weeklySchema = new mongoose.Schema(
       enum: ["active", "completed"],
       default: "active",
     },
+    endDate: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );

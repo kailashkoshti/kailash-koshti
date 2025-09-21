@@ -301,15 +301,9 @@ const updateWeeklyInstallment = asyncHandler(async (req, res) => {
     // Keep remaining amount unchanged (only updated when principal is paid back)
     const remainingAmount = weeklyLoan.remainingAmount;
 
-    // Determine loan status: completed only if marked as paid AND all installments are paid
-    const isAllInterestPaid = updatedInstallments.every(
-      (inst) => inst.status === "paid"
-    );
-    const isMarkedAsPaid = weeklyLoan.collectedAmount >= weeklyLoan.loanAmount;
-
-    // Only completed if marked as paid AND all installments are paid
+    // Keep loan status as active unless it was already marked as completed
     const loanStatus =
-      isMarkedAsPaid && isAllInterestPaid ? "completed" : "active";
+      weeklyLoan.status === "completed" ? "completed" : "active";
 
     const updateData = {
       installments: updatedInstallments,
@@ -459,19 +453,16 @@ const markWeeklyLoanAsPaid = asyncHandler(async (req, res) => {
       (inst) => inst.status !== "paid"
     );
 
-    // Determine final status: completed only if marked as paid AND all interest installments are paid
-    const allInstallmentsPaid = weeklyLoan.installments.every(
-      (inst) => inst.status === "paid"
-    );
-    const wasAlreadyMarkedAsPaid =
-      weeklyLoan.collectedAmount >= weeklyLoan.loanAmount;
-    const finalStatus = allInstallmentsPaid ? "completed" : "active";
+    // Always mark as completed when mark as paid is clicked
+    const finalStatus = "completed";
+    const endDate = new Date(); // Set current date as end date
 
     // Update the loan to mark as paid
     const updateData = {
       collectedAmount: weeklyLoan.collectedAmount + weeklyLoan.loanAmount, // Add loan amount to existing collected amount
       remainingAmount: 0, // Set to 0
-      status: finalStatus, // Mark as completed only if all installments are paid
+      status: finalStatus, // Always mark as completed
+      endDate: endDate, // Set end date
     };
 
     const updatedLoan = await Weekly.findByIdAndUpdate(id, updateData, {

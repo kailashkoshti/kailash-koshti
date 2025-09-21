@@ -17,6 +17,7 @@ interface WeeklyLoan {
   collectedAmount: number;
   remainingAmount: number;
   status: "active" | "completed";
+  endDate: string | null;
   installments: Array<{
     period: number;
     date: string;
@@ -600,7 +601,34 @@ export default function WeeklyLoanDetail() {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-          {loan.status === "active" &&
+          {loan.status === "completed" ? (
+            <div className="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-md flex items-center justify-center space-x-2 text-sm sm:text-base">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <span className="hidden sm:inline">
+                Completed on{" "}
+                {loan.endDate
+                  ? new Date(loan.endDate).toLocaleDateString("en-GB")
+                  : "N/A"}
+              </span>
+              <span className="sm:hidden">
+                {loan.endDate
+                  ? new Date(loan.endDate).toLocaleDateString("en-GB")
+                  : "N/A"}
+              </span>
+            </div>
+          ) : (
             loan.collectedAmount < loan.loanAmount && (
               <button
                 onClick={handleMarkAsPaid}
@@ -627,7 +655,8 @@ export default function WeeklyLoanDetail() {
                   {updating ? "Processing..." : "Mark Paid"}
                 </span>
               </button>
-            )}
+            )
+          )}
           <button
             onClick={handleDeleteLoan}
             disabled={updating}
