@@ -396,11 +396,11 @@ export default function DailyLoanDetail() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Notification */}
       {notification && (
         <div
-          className={`fixed top-20 right-4 z-50 max-w-sm w-full bg-white rounded-lg shadow-lg border-l-4 ${
+          className={`fixed top-16 sm:top-20 right-2 sm:right-4 left-2 sm:left-auto z-50 max-w-sm sm:max-w-sm w-auto sm:w-full bg-white rounded-lg shadow-lg border-l-4 ${
             notification.type === "success"
               ? "border-green-500"
               : notification.type === "error"
@@ -408,12 +408,12 @@ export default function DailyLoanDetail() {
               : "border-blue-500"
           }`}
         >
-          <div className="p-4">
+          <div className="p-3 sm:p-4">
             <div className="flex items-start">
               <div className="flex-shrink-0">
                 {notification.type === "success" && (
                   <svg
-                    className="h-5 w-5 text-green-500"
+                    className="h-4 w-4 sm:h-5 sm:w-5 text-green-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -426,7 +426,7 @@ export default function DailyLoanDetail() {
                 )}
                 {notification.type === "error" && (
                   <svg
-                    className="h-5 w-5 text-red-500"
+                    className="h-4 w-4 sm:h-5 sm:w-5 text-red-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -439,7 +439,7 @@ export default function DailyLoanDetail() {
                 )}
                 {notification.type === "info" && (
                   <svg
-                    className="h-5 w-5 text-blue-500"
+                    className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -451,9 +451,9 @@ export default function DailyLoanDetail() {
                   </svg>
                 )}
               </div>
-              <div className="ml-3 w-0 flex-1">
+              <div className="ml-2 sm:ml-3 w-0 flex-1">
                 <p
-                  className={`text-sm font-medium ${
+                  className={`text-xs sm:text-sm font-medium ${
                     notification.type === "success"
                       ? "text-green-800"
                       : notification.type === "error"
@@ -464,7 +464,7 @@ export default function DailyLoanDetail() {
                   {notification.message}
                 </p>
               </div>
-              <div className="ml-4 flex-shrink-0 flex">
+              <div className="ml-2 sm:ml-4 flex-shrink-0 flex">
                 <button
                   onClick={() => setNotification(null)}
                   className={`inline-flex ${
@@ -476,7 +476,7 @@ export default function DailyLoanDetail() {
                   }`}
                 >
                   <svg
-                    className="h-5 w-5"
+                    className="h-4 w-4 sm:h-5 sm:w-5"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -494,16 +494,20 @@ export default function DailyLoanDetail() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">{loan.name}</h1>
-          <p className="mt-2 text-gray-600">Daily Loan Details</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">
+            {loan.name}
+          </h1>
+          <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
+            Daily Loan Details
+          </p>
         </div>
-        <div className="flex space-x-3">
+        <div className="flex space-x-2 sm:space-x-3">
           <button
             onClick={handleDeleteLoan}
             disabled={updating}
-            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50 flex items-center space-x-2"
+            className="px-3 sm:px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50 flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base"
           >
             <svg
               className="h-4 w-4"
@@ -518,24 +522,31 @@ export default function DailyLoanDetail() {
                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
-            <span>{updating ? "Deleting..." : "Delete Loan"}</span>
+            <span className="hidden sm:inline">
+              {updating ? "Deleting..." : "Delete Loan"}
+            </span>
+            <span className="sm:hidden">{updating ? "..." : "Delete"}</span>
           </button>
         </div>
       </div>
 
       {/* Loan Information Card */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           <div>
-            <p className="text-sm text-gray-600">Customer Name</p>
-            <p className="text-lg font-semibold text-gray-900">{loan.name}</p>
+            <p className="text-xs sm:text-sm text-gray-600">Customer Name</p>
+            <p className="text-base sm:text-lg font-semibold text-gray-900 truncate">
+              {loan.name}
+            </p>
             {loan.phoneNumber && (
-              <p className="text-sm text-gray-600 mt-1">{loan.phoneNumber}</p>
+              <p className="text-xs sm:text-sm text-gray-600 mt-1 truncate">
+                {loan.phoneNumber}
+              </p>
             )}
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Loan Status</p>
+            <p className="text-xs sm:text-sm text-gray-600">Loan Status</p>
             <span
               className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                 loan.status === "active"
@@ -548,68 +559,72 @@ export default function DailyLoanDetail() {
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Issuing Date</p>
-            <p className="text-lg font-semibold text-gray-900">
+            <p className="text-xs sm:text-sm text-gray-600">Issuing Date</p>
+            <p className="text-base sm:text-lg font-semibold text-gray-900">
               {formatDate(loan.issuingDate)}
             </p>
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Total Days</p>
-            <p className="text-lg font-semibold text-gray-900">
+            <p className="text-xs sm:text-sm text-gray-600">Total Days</p>
+            <p className="text-base sm:text-lg font-semibold text-gray-900">
               {loan.numberOfDays} days
             </p>
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           <div>
-            <p className="text-sm text-gray-600">Total Loan Amount</p>
-            <p className="text-xl font-bold text-gray-900">
+            <p className="text-xs sm:text-sm text-gray-600">
+              Total Loan Amount
+            </p>
+            <p className="text-lg sm:text-xl font-bold text-gray-900 truncate">
               {formatCurrency(loan.loanAmount)}
             </p>
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Amount Given</p>
-            <p className="text-xl font-bold text-blue-600">
+            <p className="text-xs sm:text-sm text-gray-600">Amount Given</p>
+            <p className="text-lg sm:text-xl font-bold text-blue-600 truncate">
               {formatCurrency(loan.amountGiven)}
             </p>
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Amount Collected</p>
-            <p className="text-xl font-bold text-green-600">
+            <p className="text-xs sm:text-sm text-gray-600">Amount Collected</p>
+            <p className="text-lg sm:text-xl font-bold text-green-600 truncate">
               {formatCurrency(loan.collectedAmount)}
             </p>
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Amount Remaining</p>
-            <p className="text-xl font-bold text-orange-600">
+            <p className="text-xs sm:text-sm text-gray-600">Amount Remaining</p>
+            <p className="text-lg sm:text-xl font-bold text-orange-600 truncate">
               {formatCurrency(loan.remainingAmount)}
             </p>
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           <div>
-            <p className="text-sm text-gray-600">Amount per Day</p>
-            <p className="text-lg font-semibold text-indigo-600">
+            <p className="text-xs sm:text-sm text-gray-600">Amount per Day</p>
+            <p className="text-base sm:text-lg font-semibold text-indigo-600 truncate">
               {formatCurrency(loan.amountPerDay)}
             </p>
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Total Profit</p>
-            <p className="text-lg font-semibold text-purple-600">
+            <p className="text-xs sm:text-sm text-gray-600">Total Profit</p>
+            <p className="text-base sm:text-lg font-semibold text-purple-600 truncate">
               {formatCurrency(loan.profitAmount)}
             </p>
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Profit Percentage</p>
-            <p className="text-lg font-semibold text-purple-600">
+            <p className="text-xs sm:text-sm text-gray-600">
+              Profit Percentage
+            </p>
+            <p className="text-base sm:text-lg font-semibold text-purple-600">
               {loan.profitPercentage.toFixed(1)}%
             </p>
           </div>
@@ -617,17 +632,17 @@ export default function DailyLoanDetail() {
       </div>
 
       {/* Installment Management */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 sm:mb-6">
           <h2 className="text-xl font-semibold text-gray-900">
             Installment Management
           </h2>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <button
               onClick={handleInstallmentUpdate}
               disabled={updating || selectedInstallments.size === 0}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+              className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
             >
               {updating
                 ? "Updating..."
@@ -641,22 +656,22 @@ export default function DailyLoanDetail() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Select
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Day
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Amount
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Due Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Paid Date
                 </th>
               </tr>
@@ -672,7 +687,7 @@ export default function DailyLoanDetail() {
                   }`}
                   onClick={() => handleInstallmentSelect(installment.period)}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <input
                       type="checkbox"
                       checked={selectedInstallments.has(installment.period)}
@@ -682,22 +697,22 @@ export default function DailyLoanDetail() {
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-medium text-gray-900">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <span className="text-xs sm:text-sm font-medium text-gray-900">
                       Day {installment.period}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-semibold text-gray-900">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-xs sm:text-sm font-semibold text-gray-900">
                       {formatCurrency(installment.amount)}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-600">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-xs sm:text-sm text-gray-600">
                       {formatDate(installment.date)}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <span
                       className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
                         installment.status
@@ -706,8 +721,8 @@ export default function DailyLoanDetail() {
                       {installment.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-600">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-xs sm:text-sm text-gray-600">
                       {installment.paidOn
                         ? formatDate(installment.paidOn)
                         : "-"}

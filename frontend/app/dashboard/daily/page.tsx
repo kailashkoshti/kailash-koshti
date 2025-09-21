@@ -127,21 +127,23 @@ export default function DailyLoans() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
       <div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Daily Loans</h1>
-            <p className="mt-2 text-gray-600">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              Daily Loans
+            </h1>
+            <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
               Manage and track daily loan transactions
             </p>
           </div>
-          <div className="text-right">
-            <div className="text-2xl font-bold text-blue-600">
+          <div className="text-center sm:text-right">
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">
               {loans.length}
             </div>
-            <div className="text-sm text-gray-500">
+            <div className="text-xs sm:text-sm text-gray-500">
               {loans.length === 1 ? "Loan" : "Loans"}
             </div>
           </div>
@@ -149,17 +151,17 @@ export default function DailyLoans() {
       </div>
 
       {/* Search and Filter Section */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+      <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center justify-between">
           {/* Search Bar */}
-          <div className="flex-1 max-w-md">
+          <div className="flex-1 w-full sm:max-w-md">
             <label htmlFor="search" className="sr-only">
               Search loans
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg
-                  className="h-5 w-5 text-gray-400"
+                  className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -175,7 +177,7 @@ export default function DailyLoans() {
               <input
                 type="text"
                 id="search"
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="block w-full pl-8 sm:pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 placeholder="Search by customer name or phone number"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -184,16 +186,16 @@ export default function DailyLoans() {
           </div>
 
           {/* Status Filter */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4 w-full sm:w-auto">
             <label
               htmlFor="status-filter"
-              className="text-sm font-medium text-gray-700"
+              className="text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap"
             >
               Status:
             </label>
             <select
               id="status-filter"
-              className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+              className="block w-full sm:w-auto pl-3 pr-8 py-2 text-sm border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md"
               value={statusFilter}
               onChange={(e) =>
                 setStatusFilter(
@@ -210,7 +212,7 @@ export default function DailyLoans() {
           {/* Create New Loan Button */}
           <button
             onClick={handleCreateNewLoan}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Create New Loan
           </button>
@@ -219,17 +221,17 @@ export default function DailyLoans() {
 
       {/* Results Count */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-700">
+        <p className="text-xs sm:text-sm text-gray-700">
           Showing {filteredLoans.length} of {loans.length} loans
         </p>
       </div>
 
       {/* Loans Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {filteredLoans.map((loan, index) => (
           <div
             key={loan._id}
-            className="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out p-6 border-l-4 border-blue-500 cursor-pointer"
+            className="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out p-4 sm:p-6 border-l-4 border-blue-500 cursor-pointer"
             onClick={() => router.push(`/dashboard/daily/${loan._id}`)}
           >
             {/* Card Number */}
@@ -239,12 +241,12 @@ export default function DailyLoans() {
               </div>
             </div>
             {/* Header with Status */}
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
                 {loan.name}
               </h3>
               <span
-                className={`px-2 py-1 text-xs font-medium rounded-full ${
+                className={`px-2 py-1 text-xs font-medium rounded-full flex-shrink-0 ${
                   loan.status === "active"
                     ? "bg-green-100 text-green-800"
                     : "bg-gray-100 text-gray-800"
@@ -256,70 +258,70 @@ export default function DailyLoans() {
 
             {/* Phone Number */}
             {loan.phoneNumber && (
-              <div className="mb-4">
-                <p className="text-sm text-gray-600">Phone Number</p>
-                <p className="text-base font-medium text-gray-900">
+              <div className="mb-3 sm:mb-4">
+                <p className="text-xs sm:text-sm text-gray-600">Phone Number</p>
+                <p className="text-sm sm:text-base font-medium text-gray-900 truncate">
                   {loan.phoneNumber}
                 </p>
               </div>
             )}
 
             {/* Financial Details Grid */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
               <div>
                 <p className="text-xs text-gray-600">Total Loan Amount</p>
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-xs sm:text-sm font-semibold text-gray-900 truncate">
                   {formatCurrency(loan.loanAmount)}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-gray-600">Amount Given</p>
-                <p className="text-sm font-semibold text-blue-600">
+                <p className="text-xs sm:text-sm font-semibold text-blue-600 truncate">
                   {formatCurrency(loan.amountGiven)}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-gray-600">Amount Collected</p>
-                <p className="text-sm font-semibold text-green-600">
+                <p className="text-xs sm:text-sm font-semibold text-green-600 truncate">
                   {formatCurrency(loan.collectedAmount)}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-gray-600">Amount Remaining</p>
-                <p className="text-sm font-semibold text-orange-600">
+                <p className="text-xs sm:text-sm font-semibold text-orange-600 truncate">
                   {formatCurrency(loan.remainingAmount)}
                 </p>
               </div>
             </div>
 
             {/* Days and Amount per Day */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
               <div>
                 <p className="text-xs text-gray-600">Number of Days</p>
-                <p className="text-sm font-semibold text-indigo-600">
+                <p className="text-xs sm:text-sm font-semibold text-indigo-600">
                   {loan.numberOfDays} days
                 </p>
               </div>
               <div>
                 <p className="text-xs text-gray-600">Amount per Day</p>
-                <p className="text-sm font-semibold text-teal-600">
+                <p className="text-xs sm:text-sm font-semibold text-teal-600 truncate">
                   {formatCurrency(loan.amountPerDay)}
                 </p>
               </div>
             </div>
 
             {/* Profit Information */}
-            <div className="border-t pt-4">
+            <div className="border-t pt-3 sm:pt-4">
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-xs text-gray-600">Total Profit</p>
-                  <p className="text-sm font-semibold text-purple-600">
+                  <p className="text-xs sm:text-sm font-semibold text-purple-600 truncate">
                     {formatCurrency(loan.profitAmount)}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-gray-600">Profit %</p>
-                  <p className="text-sm font-semibold text-purple-600">
+                  <p className="text-xs sm:text-sm font-semibold text-purple-600">
                     {loan.profitPercentage.toFixed(1)}%
                   </p>
                 </div>
@@ -327,9 +329,9 @@ export default function DailyLoans() {
             </div>
 
             {/* Issuing Date */}
-            <div className="mt-4 pt-4 border-t">
+            <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t">
               <p className="text-xs text-gray-600">Issuing Date</p>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-xs sm:text-sm font-medium text-gray-900">
                 {formatDate(loan.issuingDate)}
               </p>
             </div>
@@ -339,9 +341,9 @@ export default function DailyLoans() {
 
       {/* No Results */}
       {filteredLoans.length === 0 && (
-        <div className="text-center py-12">
+        <div className="text-center py-8 sm:py-12">
           <svg
-            className="mx-auto h-12 w-12 text-gray-400"
+            className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -355,10 +357,10 @@ export default function DailyLoans() {
               d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"
             />
           </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">
+          <h3 className="mt-2 text-sm sm:text-base font-medium text-gray-900">
             No loans found
           </h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-xs sm:text-sm text-gray-500 px-4">
             Try adjusting your search or filter criteria.
           </p>
         </div>

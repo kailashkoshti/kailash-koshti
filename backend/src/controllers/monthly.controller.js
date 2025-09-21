@@ -264,41 +264,42 @@ const updateMonthlyInstallment = asyncHandler(async (req, res) => {
       }
     });
 
-    // Calculate total profit amount: base interest + paid installments
+    // Calculate total profit amount and collected amount based on paid installments
     let totalProfitAmount = monthlyLoan.interestAmount; // Start with base interest amount
+    let collectedAmount = 0; // Start fresh calculation for installment amounts only
+
+    // Calculate collected amount from all paid installments
     updatedInstallments.forEach((installment) => {
       if (installment.status === "paid") {
         totalProfitAmount += installment.amount; // Add monthly installment to profit
+        collectedAmount += installment.amount; // Add monthly installment to collected amount
       }
     });
 
-    // Keep existing collected amount and remaining amount unchanged
-    // These will only be updated when customer pays back the full loan amount
-    const collectedAmount = monthlyLoan.collectedAmount;
+    // If loan is marked as paid, add the loan amount to collected amount
+    if (monthlyLoan.collectedAmount >= monthlyLoan.loanAmount) {
+      collectedAmount += monthlyLoan.loanAmount;
+    }
+
+    // Keep remaining amount unchanged (only updated when principal is paid back)
     const remainingAmount = monthlyLoan.remainingAmount;
 
     // Determine loan status: completed only if marked as paid AND all installments are paid
-    // If new installments are added to a completed loan, make it active again
     const isAllInterestPaid = updatedInstallments.every(
       (inst) => inst.status === "paid"
     );
     const isMarkedAsPaid =
-      monthlyLoan.collectedAmount === monthlyLoan.loanAmount;
+      monthlyLoan.collectedAmount >= monthlyLoan.loanAmount;
 
-    let loanStatus;
-    if (newInstallmentsCount > 0) {
-      // If new installments are added, always make it active
-      loanStatus = "active";
-    } else {
-      // Only completed if marked as paid AND all installments are paid
-      loanStatus = isMarkedAsPaid && isAllInterestPaid ? "completed" : "active";
-    }
+    // Only completed if marked as paid AND all installments are paid
+    const loanStatus =
+      isMarkedAsPaid && isAllInterestPaid ? "completed" : "active";
 
     const updateData = {
       installments: updatedInstallments,
-      profitAmount: totalProfitAmount,
-      collectedAmount: collectedAmount,
-      remainingAmount: remainingAmount,
+      profitAmount: totalProfitAmount, // Update profit amount with paid installments
+      collectedAmount: collectedAmount, // Update collected amount with paid installments
+      remainingAmount: remainingAmount, // Keep existing remaining amount (unchanged)
       status: loanStatus,
     };
 
@@ -498,13 +499,13 @@ const markMonthlyLoanAsPaid = asyncHandler(async (req, res) => {
     const allInstallmentsPaid = monthlyLoan.installments.every(
       (inst) => inst.status === "paid"
     );
-    const isMarkedAsPaid = monthlyLoan.loanAmount === monthlyLoan.loanAmount; // This will be true after update
-    const finalStatus =
-      isMarkedAsPaid && allInstallmentsPaid ? "completed" : "active";
+    const wasAlreadyMarkedAsPaid =
+      monthlyLoan.collectedAmount >= monthlyLoan.loanAmount;
+    const finalStatus = allInstallmentsPaid ? "completed" : "active";
 
     // Update loan to mark as paid
     const updateData = {
-      collectedAmount: monthlyLoan.loanAmount,
+      collectedAmount: monthlyLoan.collectedAmount + monthlyLoan.loanAmount, // Add loan amount to existing collected amount
       remainingAmount: 0,
       status: finalStatus, // Mark as completed only if all installments are paid
     };

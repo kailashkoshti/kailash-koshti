@@ -111,16 +111,16 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Dashboard Overview
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
             Financial summary and key metrics
           </p>
         </div>
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+        <div className="bg-red-50 border border-red-200 text-red-600 px-3 sm:px-4 py-2 sm:py-3 rounded-md text-sm sm:text-base">
           {error}
         </div>
       </div>
@@ -128,29 +128,37 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="mt-2 text-gray-600">Financial summary and key metrics</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          Dashboard Overview
+        </h1>
+        <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
+          Financial summary and key metrics
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {tiles.map((tile, index) => (
           <div
             key={index}
-            className={`${tile.color} rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition duration-200 ease-in-out`}
+            className={`${tile.color} rounded-lg shadow-lg p-4 sm:p-6 text-white transform hover:scale-105 transition duration-200 ease-in-out`}
           >
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium opacity-90 mb-1">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs sm:text-sm font-medium opacity-90 mb-1 truncate">
                   {tile.title}
                 </p>
-                <p className="text-3xl font-bold">
+                <p className="text-xl sm:text-2xl lg:text-3xl font-bold truncate">
                   {formatCurrency(tile.value)}
                 </p>
-                <p className="text-xs opacity-75 mt-2">{tile.description}</p>
+                <p className="text-xs opacity-75 mt-1 sm:mt-2 hidden sm:block">
+                  {tile.description}
+                </p>
               </div>
-              <div className="text-4xl opacity-80">{tile.icon}</div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl opacity-80 ml-2 flex-shrink-0">
+                {tile.icon}
+              </div>
             </div>
           </div>
         ))}

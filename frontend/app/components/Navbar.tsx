@@ -30,15 +30,21 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-blue-600 text-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className="bg-blue-600 text-white shadow-lg fixed top-0 left-0 right-0 z-50">
+      <div className="container-responsive">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-bold">Kailash Koshti</h1>
+            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold">
+              Kailash Koshti
+            </h1>
           </div>
           <div className="text-right">
-            <div className="text-sm font-bold">{formatTime(currentTime)}</div>
-            <div className="text-sm font-bold">{formatDate(currentTime)}</div>
+            <div className="text-xs sm:text-sm font-bold">
+              {formatTime(currentTime)}
+            </div>
+            <div className="text-xs sm:text-sm font-bold">
+              {formatDate(currentTime)}
+            </div>
           </div>
         </div>
       </div>

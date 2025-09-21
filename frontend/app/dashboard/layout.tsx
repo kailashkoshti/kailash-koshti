@@ -10,7 +10,7 @@ export default function DashboardLayout({
     <AuthWrapper>
       <div className="min-h-screen bg-gray-50">
         <DashboardNavbar />
-        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 pt-20">
+        <main className="container-responsive py-4 sm:py-6 pt-16 sm:pt-20">
           {children}
         </main>
       </div>

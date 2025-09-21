@@ -277,33 +277,33 @@ export default function CreateDailyLoan() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Create New Daily Loan
         </h1>
-        <p className="mt-2 text-gray-600">
+        <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
           Fill in the details to create a new daily loan
         </p>
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Customer Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label
                 htmlFor="customerName"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Customer Name *
               </label>
               <input
                 type="text"
                 id="customerName"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base ${
                   errors.customerName ? "border-red-500" : "border-gray-300"
                 }`}
                 value={formData.customerName}
@@ -313,7 +313,7 @@ export default function CreateDailyLoan() {
                 placeholder="Enter customer name"
               />
               {errors.customerName && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-xs sm:text-sm text-red-600">
                   {errors.customerName}
                 </p>
               )}
@@ -322,14 +322,14 @@ export default function CreateDailyLoan() {
             <div>
               <label
                 htmlFor="phoneNumber"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-2"
               >
                 Phone Number
               </label>
               <input
                 type="tel"
                 id="phoneNumber"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base ${
                   errors.phoneNumber ? "border-red-500" : "border-gray-300"
                 }`}
                 value={formData.phoneNumber}
@@ -355,7 +355,7 @@ export default function CreateDailyLoan() {
                 inputMode="numeric"
               />
               {errors.phoneNumber && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-xs sm:text-sm text-red-600">
                   {errors.phoneNumber}
                 </p>
               )}
@@ -363,7 +363,7 @@ export default function CreateDailyLoan() {
           </div>
 
           {/* Loan Amount Information */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <div>
               <label
                 htmlFor="totalLoanAmount"
