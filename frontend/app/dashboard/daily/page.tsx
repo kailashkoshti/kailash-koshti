@@ -22,7 +22,7 @@ interface DailyLoan {
     period: number;
     date: string;
     amount: number;
-    status: "paid" | "missed" | "pending";
+    status: "paid" | "pending";
     paidOn: string | null;
   }>;
   createdAt: string;

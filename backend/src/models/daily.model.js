@@ -63,7 +63,7 @@ const dailySchema = new mongoose.Schema(
         amount: { type: Number, required: true },
         status: {
           type: String,
-          enum: ["paid", "missed", "pending"],
+          enum: ["paid", "pending"],
           default: "pending",
         },
         paidOn: { type: Date, default: null },

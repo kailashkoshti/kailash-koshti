@@ -21,7 +21,7 @@ interface WeeklyLoan {
     period: number;
     date: string;
     amount: number;
-    status: "paid" | "missed" | "pending";
+    status: "paid" | "pending";
     paidOn: string | null;
   }>;
   issuingDate: string;
@@ -33,7 +33,7 @@ interface InstallmentUpdate {
   period: number;
   date: string;
   amount: number;
-  status: "paid" | "missed" | "pending";
+  status: "paid" | "pending";
   paidOn?: string;
 }
 
@@ -127,19 +127,7 @@ export default function WeeklyLoanDetail() {
   const handleAddInstallment = () => {
     if (!loan) return;
 
-    // Check if all existing installments are paid
-    const hasUnpaidInstallments = loan.installments.some(
-      (installment) => installment.status !== "paid"
-    );
-
-    if (hasUnpaidInstallments) {
-      setNotification({
-        type: "info",
-        message:
-          "All previous installments must be paid before adding a new one.",
-      });
-      return;
-    }
+    // Allow adding new installments regardless of previous installment status
 
     // Calculate next period and date
     const nextPeriod = loan.installments.length + 1;
@@ -172,8 +160,7 @@ export default function WeeklyLoanDetail() {
 
     setNotification({
       type: "success",
-      message:
-        "New installment added! Please mark it as paid before adding another one.",
+      message: "New installment added successfully!",
     });
   };
 
@@ -209,15 +196,8 @@ export default function WeeklyLoanDetail() {
               today.setHours(0, 0, 0, 0); // Reset time to start of day
               dueDate.setHours(0, 0, 0, 0); // Reset time to start of day
 
-              let revertStatus: "paid" | "missed" | "pending";
-
-              if (dueDate < today) {
-                // Due date has passed - mark as missed
-                revertStatus = "missed";
-              } else {
-                // Due date is today or in the future - mark as pending
-                revertStatus = "pending";
-              }
+              // Always revert to pending status
+              const revertStatus: "paid" | "pending" = "pending";
 
               allInstallments.push({
                 period,
@@ -242,7 +222,7 @@ export default function WeeklyLoanDetail() {
               period,
               date: installment.date,
               amount: installment.amount,
-              status: currentStatus as "paid" | "missed" | "pending",
+              status: currentStatus as "paid" | "pending",
               paidOn:
                 currentStatus === "paid"
                   ? installment.paidOn || undefined
@@ -424,8 +404,6 @@ export default function WeeklyLoanDetail() {
     switch (status) {
       case "paid":
         return "bg-green-100 text-green-800";
-      case "missed":
-        return "bg-red-100 text-red-800";
       case "pending":
         return "bg-yellow-100 text-yellow-800";
       default:
@@ -721,15 +699,6 @@ export default function WeeklyLoanDetail() {
               {loan.installmentPeriodInDays} days
             </p>
           </div>
-
-          <div>
-            <p className="text-xs sm:text-sm text-gray-600">
-              Total Installments
-            </p>
-            <p className="text-base sm:text-lg font-semibold text-gray-900">
-              {loan.installments.length} installments
-            </p>
-          </div>
         </div>
 
         <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -800,10 +769,7 @@ export default function WeeklyLoanDetail() {
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
             <button
               onClick={handleAddInstallment}
-              disabled={
-                updating ||
-                loan.installments.some((inst) => inst.status !== "paid")
-              }
+              disabled={updating}
               className="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 flex items-center justify-center space-x-2 text-sm sm:text-base"
             >
               <svg
@@ -819,16 +785,8 @@ export default function WeeklyLoanDetail() {
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              <span className="hidden sm:inline">
-                {loan.installments.some((inst) => inst.status !== "paid")
-                  ? "Pay All Previous Installments First"
-                  : "Add Installment"}
-              </span>
-              <span className="sm:hidden">
-                {loan.installments.some((inst) => inst.status !== "paid")
-                  ? "Pay All First"
-                  : "Add Installment"}
-              </span>
+              <span className="hidden sm:inline">Add Installment</span>
+              <span className="sm:hidden">Add Installment</span>
             </button>
 
             <button

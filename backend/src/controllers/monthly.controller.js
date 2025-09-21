@@ -213,10 +213,10 @@ const updateMonthlyInstallment = asyncHandler(async (req, res) => {
       }
 
       // Validate status if provided
-      if (status && !["paid", "missed", "pending"].includes(status)) {
+      if (status && !["paid", "pending"].includes(status)) {
         throw new ApiError(
           400,
-          "Invalid installment status. Must be 'paid', 'missed', or 'pending'"
+          "Invalid installment status. Must be 'paid' or 'pending'"
         );
       }
 
@@ -246,7 +246,7 @@ const updateMonthlyInstallment = asyncHandler(async (req, res) => {
               ? new Date(paidOn)
               : status === "paid"
               ? new Date()
-              : null, // Set to null when reverting from paid to pending/missed
+              : null, // Set to null when reverting from paid to pending
         };
         updatedInstallments.push(updatedInstallment);
         updatedInstallmentsCount++;

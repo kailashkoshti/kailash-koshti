@@ -59,12 +59,8 @@ const createDailyLoan = asyncHandler(async (req, res) => {
     installmentDate.setDate(installmentDate.getDate() + i);
     installmentDate.setHours(0, 0, 0, 0); // Set to start of day
 
-    // Determine installment status based on date
+    // All installments start as pending regardless of date
     let installmentStatus = "pending";
-    if (installmentDate < currentDate) {
-      // If installment date has passed, mark as missed by default
-      installmentStatus = "missed";
-    }
 
     installments.push({
       period: i,
@@ -217,10 +213,10 @@ const updateDailyInstallment = asyncHandler(async (req, res) => {
       }
 
       // Validate status
-      if (!["paid", "missed", "pending"].includes(status)) {
+      if (!["paid", "pending"].includes(status)) {
         throw new ApiError(
           400,
-          "Invalid installment status. Must be 'paid', 'missed', or 'pending'"
+          "Invalid installment status. Must be 'paid' or 'pending'"
         );
       }
 

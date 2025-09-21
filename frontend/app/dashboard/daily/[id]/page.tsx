@@ -22,7 +22,7 @@ interface DailyLoan {
     period: number;
     date: string;
     amount: number;
-    status: "paid" | "missed" | "pending";
+    status: "paid" | "pending";
     paidOn: string | null;
   }>;
   createdAt: string;
@@ -31,7 +31,7 @@ interface DailyLoan {
 
 interface InstallmentUpdate {
   period: number;
-  status: "paid" | "missed" | "pending";
+  status: "paid" | "pending";
   paidOn?: string;
 }
 
@@ -154,15 +154,8 @@ export default function DailyLoanDetail() {
               today.setHours(0, 0, 0, 0); // Reset time to start of day
               dueDate.setHours(0, 0, 0, 0); // Reset time to start of day
 
-              let revertStatus: "paid" | "missed" | "pending";
-
-              if (dueDate < today) {
-                // Due date has passed - mark as missed
-                revertStatus = "missed";
-              } else {
-                // Due date is today or in the future - mark as pending
-                revertStatus = "pending";
-              }
+              // Always revert to pending status
+              const revertStatus: "paid" | "pending" = "pending";
 
               allInstallments.push({
                 period,
@@ -181,7 +174,7 @@ export default function DailyLoanDetail() {
             // Unselected installments - keep current status
             allInstallments.push({
               period,
-              status: currentStatus as "paid" | "missed" | "pending",
+              status: currentStatus as "paid" | "pending",
               paidOn:
                 currentStatus === "paid"
                   ? installment.paidOn || undefined
@@ -307,8 +300,6 @@ export default function DailyLoanDetail() {
     switch (status) {
       case "paid":
         return "bg-green-100 text-green-800";
-      case "missed":
-        return "bg-red-100 text-red-800";
       case "pending":
         return "bg-yellow-100 text-yellow-800";
       default:
