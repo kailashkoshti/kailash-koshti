@@ -83,12 +83,12 @@ const getDashboardData = asyncHandler(async (req, res) => {
       const amountGiven = loan.amountGiven || 0;
       const collectedAmount = loan.collectedAmount || 0;
       const remainingAmount = loan.remainingAmount || 0;
-      const profitAmount = loan.profitAmount || 0;
+      const totalProfit = loan.totalProfit || 0; // Use totalProfit for daily loans
 
       totalAmountGiven += amountGiven;
       totalAmountCollected += collectedAmount;
       totalAmountRemaining += remainingAmount;
-      totalProfitAmount += profitAmount;
+      totalProfitAmount += totalProfit;
     });
 
     // Process Weekly Loans

@@ -10,7 +10,7 @@ const createDailyLoan = asyncHandler(async (req, res) => {
     customerName,
     phoneNumber,
     amountGiven,
-    profitAmount,
+    expectedProfit,
     profitPercentage,
     totalLoanAmount,
     numberOfDays,
@@ -21,7 +21,7 @@ const createDailyLoan = asyncHandler(async (req, res) => {
   if (
     !customerName ||
     !amountGiven ||
-    !profitAmount ||
+    !expectedProfit ||
     !profitPercentage ||
     !totalLoanAmount ||
     !numberOfDays ||
@@ -30,7 +30,7 @@ const createDailyLoan = asyncHandler(async (req, res) => {
   ) {
     throw new ApiError(
       400,
-      "All fields are required: customerName, amountGiven, profitAmount, profitPercentage, totalLoanAmount, numberOfDays, amountPerDay, issuingDate"
+      "All fields are required: customerName, amountGiven, expectedProfit, profitPercentage, totalLoanAmount, numberOfDays, amountPerDay, issuingDate"
     );
   }
 
@@ -82,7 +82,8 @@ const createDailyLoan = asyncHandler(async (req, res) => {
     loanAmount: totalLoanAmount,
     amountGiven: amountGiven,
     issuingDate: parsedIssuingDate,
-    profitAmount: profitAmount,
+    expectedProfit: expectedProfit,
+    totalProfit: 0, // Initially 0 since collectedAmount is 0
     profitPercentage: profitPercentage,
     numberOfDays: numberOfDays,
     amountPerDay: amountPerDay,
@@ -255,6 +256,9 @@ const updateDailyInstallment = asyncHandler(async (req, res) => {
     // Calculate remaining amount
     const remainingAmount = dailyLoan.loanAmount - collectedAmount;
 
+    // Calculate total profit (collectedAmount - amountGiven, if positive, else 0)
+    const totalProfit = Math.max(0, collectedAmount - dailyLoan.amountGiven);
+
     // Determine loan status
     const loanStatus = remainingAmount <= 0 ? "completed" : "active";
 
@@ -265,6 +269,7 @@ const updateDailyInstallment = asyncHandler(async (req, res) => {
         installments: updatedInstallments,
         collectedAmount: collectedAmount,
         remainingAmount: remainingAmount,
+        totalProfit: totalProfit,
         status: loanStatus,
       },
       { new: true, runValidators: true }

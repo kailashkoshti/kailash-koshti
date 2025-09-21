@@ -27,7 +27,11 @@ const dailySchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    profitAmount: {
+    expectedProfit: {
+      type: Number,
+      required: true,
+    },
+    totalProfit: {
       type: Number,
       required: true,
     },

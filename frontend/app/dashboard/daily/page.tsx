@@ -11,7 +11,8 @@ interface DailyLoan {
   loanAmount: number;
   amountGiven: number;
   issuingDate: string;
-  profitAmount: number;
+  expectedProfit: number;
+  totalProfit: number;
   profitPercentage: number;
   numberOfDays: number;
   amountPerDay: number;
@@ -313,19 +314,25 @@ export default function DailyLoans() {
 
             {/* Profit Information */}
             <div className="border-t pt-3 sm:pt-4">
-              <div className="flex justify-between items-center">
+              <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                <div>
+                  <p className="text-xs text-gray-600">Expected Profit</p>
+                  <p className="text-xs sm:text-sm font-semibold text-blue-600 truncate">
+                    {formatCurrency(loan.expectedProfit)}
+                  </p>
+                </div>
                 <div>
                   <p className="text-xs text-gray-600">Total Profit</p>
                   <p className="text-xs sm:text-sm font-semibold text-purple-600 truncate">
-                    {formatCurrency(loan.profitAmount)}
+                    {formatCurrency(loan.totalProfit)}
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-xs text-gray-600">Profit %</p>
-                  <p className="text-xs sm:text-sm font-semibold text-purple-600">
-                    {loan.profitPercentage.toFixed(1)}%
-                  </p>
-                </div>
+              </div>
+              <div className="mt-2 text-center">
+                <p className="text-xs text-gray-600">Profit %</p>
+                <p className="text-xs sm:text-sm font-semibold text-purple-600">
+                  {loan.profitPercentage.toFixed(1)}%
+                </p>
               </div>
             </div>
 

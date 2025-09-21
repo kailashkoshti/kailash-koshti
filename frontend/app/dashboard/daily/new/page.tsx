@@ -7,7 +7,7 @@ interface CreateDailyLoanRequest {
   customerName: string;
   phoneNumber: string;
   amountGiven: number;
-  profitAmount: number;
+  expectedProfit: number;
   profitPercentage: number;
   totalLoanAmount: number;
   numberOfDays: number;
@@ -20,7 +20,7 @@ interface DailyLoanForm {
   phoneNumber: string;
   totalLoanAmount: number;
   amountGiven: number;
-  profitAmount: number;
+  expectedProfit: number;
   profitPercentage: number;
   numberOfDays: number;
   amountPerDay: number;
@@ -34,7 +34,7 @@ export default function CreateDailyLoan() {
     phoneNumber: "",
     totalLoanAmount: 0,
     amountGiven: 0,
-    profitAmount: 0,
+    expectedProfit: 0,
     profitPercentage: 0,
     numberOfDays: 0,
     amountPerDay: 0,
@@ -47,20 +47,20 @@ export default function CreateDailyLoan() {
   // Check if days fields should be enabled
   const isDaysFieldsEnabled =
     formData.totalLoanAmount > 0 &&
-    formData.profitAmount > 0 &&
+    formData.expectedProfit > 0 &&
     formData.profitPercentage > 0;
 
   // Auto-calculate profit percentage when profit amount or total loan amount changes
   useEffect(() => {
-    if (formData.profitAmount > 0 && formData.totalLoanAmount > 0) {
+    if (formData.expectedProfit > 0 && formData.totalLoanAmount > 0) {
       const percentage =
-        (formData.profitAmount / formData.totalLoanAmount) * 100;
+        (formData.expectedProfit / formData.totalLoanAmount) * 100;
       setFormData((prev) => ({
         ...prev,
         profitPercentage: Math.round(percentage * 100) / 100, // Round to 2 decimal places
       }));
     }
-  }, [formData.profitAmount, formData.totalLoanAmount]);
+  }, [formData.expectedProfit, formData.totalLoanAmount]);
 
   // Auto-calculate profit amount when profit percentage or total loan amount changes
   useEffect(() => {
@@ -69,21 +69,21 @@ export default function CreateDailyLoan() {
         (formData.totalLoanAmount * formData.profitPercentage) / 100;
       setFormData((prev) => ({
         ...prev,
-        profitAmount: Math.round(amount),
+        expectedProfit: Math.round(amount),
       }));
     }
   }, [formData.profitPercentage, formData.totalLoanAmount]);
 
   // Auto-calculate amount given when total loan amount and profit amount change
   useEffect(() => {
-    if (formData.totalLoanAmount > 0 && formData.profitAmount > 0) {
-      const amountGiven = formData.totalLoanAmount - formData.profitAmount;
+    if (formData.totalLoanAmount > 0 && formData.expectedProfit > 0) {
+      const amountGiven = formData.totalLoanAmount - formData.expectedProfit;
       setFormData((prev) => ({
         ...prev,
         amountGiven: amountGiven,
       }));
     }
-  }, [formData.totalLoanAmount, formData.profitAmount]);
+  }, [formData.totalLoanAmount, formData.expectedProfit]);
 
   // Track which field was last changed to avoid circular calculations
   const [lastChangedField, setLastChangedField] = useState<string | null>(null);
@@ -138,7 +138,7 @@ export default function CreateDailyLoan() {
         [field]: Number(value),
         // Clear all money, days, and percentage related fields
         amountGiven: 0,
-        profitAmount: 0,
+        expectedProfit: 0,
         profitPercentage: 0,
         numberOfDays: 0,
         amountPerDay: 0,
@@ -183,8 +183,8 @@ export default function CreateDailyLoan() {
       newErrors.amountGiven = "Amount given must be greater than 0";
     }
 
-    if (formData.profitAmount <= 0) {
-      newErrors.profitAmount = "Profit amount must be greater than 0";
+    if (formData.expectedProfit <= 0) {
+      newErrors.expectedProfit = "Expected profit must be greater than 0";
     }
 
     if (formData.numberOfDays <= 0) {
@@ -234,7 +234,7 @@ export default function CreateDailyLoan() {
         phoneNumber: formData.phoneNumber,
         totalLoanAmount: formData.totalLoanAmount,
         amountGiven: formData.amountGiven,
-        profitAmount: formData.profitAmount,
+        expectedProfit: formData.expectedProfit,
         profitPercentage: formData.profitPercentage,
         numberOfDays: formData.numberOfDays,
         amountPerDay: formData.amountPerDay,
@@ -400,10 +400,10 @@ export default function CreateDailyLoan() {
 
             <div>
               <label
-                htmlFor="profitAmount"
+                htmlFor="expectedProfit"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Profit Amount *
+                Expected Profit *
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -411,21 +411,21 @@ export default function CreateDailyLoan() {
                 </div>
                 <input
                   type="number"
-                  id="profitAmount"
+                  id="expectedProfit"
                   className={`w-full pl-8 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
-                    errors.profitAmount ? "border-red-500" : "border-gray-300"
+                    errors.expectedProfit ? "border-red-500" : "border-gray-300"
                   }`}
-                  value={formData.profitAmount || ""}
+                  value={formData.expectedProfit || ""}
                   onChange={(e) =>
-                    handleInputChange("profitAmount", Number(e.target.value))
+                    handleInputChange("expectedProfit", Number(e.target.value))
                   }
                   placeholder="Enter profit amount"
                   min="0"
                 />
               </div>
-              {errors.profitAmount && (
+              {errors.expectedProfit && (
                 <p className="mt-1 text-sm text-red-600">
-                  {errors.profitAmount}
+                  {errors.expectedProfit}
                 </p>
               )}
             </div>
